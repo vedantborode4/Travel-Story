@@ -1,12 +1,13 @@
 require("dotenv").config();
 
 const mongoose = require("mongoose")
-const config = require ("./config.json")
+const config = require ("../config.json")
 const bcrypt = require ("bcrypt");
 const express = require ("express")
 const cors = require ("cors")
-
 const jwt = require("jsonwebtoken")
+
+const User = require("./models/user.model.js")
 
 mongoose.connect(config.connectionString)
 
