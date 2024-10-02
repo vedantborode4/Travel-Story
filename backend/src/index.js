@@ -1,30 +1,17 @@
-require("dotenv").config();
+// // require('dotenv').config()
+// import dotenv from "dotenv"
+// import connectDB from "./db/index.js" 
 
-const mongoose = require("mongoose")
-const config = require ("../config.json")
-const bcrypt = require ("bcrypt");
-const express = require ("express")
-const cors = require ("cors")
-const jwt = require("jsonwebtoken")
+// dotenv.config({
+//     path: './env'
+// })
+// // console.log(process.env)
 
-const User = require("./models/user.model.js")
+// connectDB()
 
-mongoose.connect(config.connectionString)
-
-const app = express ()
-app.use(express.json())
-app.use(cors({origin: "*"}))
-
-app.get("/hello", async (req, res) => {
-    return res
-    .status(200)
-    .json({
-        message: "hello"
-    })
-} )
-
-
-app.listen(8000)
-console.log("app  is listening on post 8000");
-
-module.exports = app
+import dotenv from "dotenv"
+import connetDB from "./db/index.js";
+dotenv.config({
+    path: "./env"
+})
+connetDB()
