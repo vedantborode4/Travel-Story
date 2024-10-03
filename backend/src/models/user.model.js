@@ -21,7 +21,6 @@ const userSchema = new mongoose.Schema ({
     timestamps: true
 })
 
-export const User = mongoose.model("User", userSchema)
 
 
 
@@ -59,3 +58,6 @@ userSchema.methods.generateRefreshToken = function () {
         }
     )
 }
+
+
+export const User = mongoose.model("User", userSchema)
