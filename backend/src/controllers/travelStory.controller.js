@@ -144,15 +144,93 @@ const deleteTravelStory = asyncHandler ( async (req, res) => {
                 new ApiResponse(200, "travel story deleted succesfully")
             )
     } catch (error) {
-        
+        throw new ApiError(500, "failed to delete travel story")
     }
 })
 
+const updateIsFavourite = asyncHandler ( async (req, res) => {
+    const { id } = req.params
+    const { userId } = req.body
+    const { isFavourite } = req.body
+
+    try {
+        const travelStory = await TravelStory.findOne({_id: id, userId: userId})
+
+        if (!travelStory) {
+            throw new ApiError(404, "Travel Story not found")
+        }
+
+        travelStory.isFavourite = isFavourite
+
+        await travelStory.save()
+
+        return res
+        .status(200)
+        .json(
+            new ApiResponse(200, {story: travelStory}, "Update succesfully")
+        )
+    } catch (error) {
+        throw new ApiError(500, error)
+    }
+})
+
+const searchTravelStory = asyncHandler( async (req, res) => {
+
+    const { query } = req.query
+    const { userId } = req.user
+
+    if (!query) {
+        throw new ApiError(404, "query is required")
+    }
+
+    try {
+        const searchResults = await TravelStory.find({
+            userId: userId,
+            $or: [
+                { title: { $regex: query, $options: "i" }},
+                { story: { $regex: query, $options: "i" }},
+                { visitedLocation: { $regex: query, $options: "i" }},
+            ],
+        }).sort({ isFavourite: -1 });
+
+        return res
+        .status(200)
+        .json(
+            new ApiResponse(200, {stories: searchResults})
+        )
+    } catch (error) {
+        throw new ApiError(500, error)
+    }
+})
+
+const filterTravelStory = asyncHandler ( async (req, res) => {
+    const { startDate, endDate } = req.query
+    const { userId } = req.user;
+
+    try{
+        const start = new Date(parseInt(startDate))
+        const end = new Date(parseInt(endDate))
+
+        const filtererStories = await TravelStory.find({
+            userId: userId,
+            visitedDate: { $gte: start, $lte: end}
+        }).sort({ isFavourite: -1 })
+
+        res
+        .status(200)
+        .json({ stories: filterTravelStory})
+    } catch (error) {
+        throw new ApiError(500, error)
+    }
+})
 
 export {
     addTravelStory,
     getAllTravelStories,
     imageUpload,
     editTravelStory,
-    deleteTravelStory
+    deleteTravelStory,
+    updateIsFavourite,
+    searchTravelStory,
+    filterTravelStory
 }
