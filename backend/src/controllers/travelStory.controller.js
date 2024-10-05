@@ -1,8 +1,8 @@
-import {User} from "../models/user.model.js"
 import {asyncHandler} from "../utils/asyncHandler.js"
 import {ApiResponse} from "../utils/ApiResponse.js"
 import {ApiError} from "../utils/ApiError.js"
 import { TravelStory } from "../models/travelstory.model.js"
+
 
 const addTravelStory = asyncHandler( async (req, res) => {
     const {title, story, visitedLocation, imageURL, visitedDate} = req.body
@@ -61,7 +61,31 @@ const getAllTravelStories = asyncHandler( async (req, res) => {
     }
 })
 
+const imageUpload = asyncHandler( async (req, res) => {
+    try {
+        if(!req.file) {
+            throw new ApiError(
+                401, "Upload the image"
+            )
+        }
+
+        const imageURL = `http://localhost:8000/public/temp/{req.file.filename}`
+
+        res
+        .status(201)
+        .json(
+            new ApiResponse(201, imageURL, "image")
+        )
+            
+    } catch (error) {
+        throw new ApiError (
+            500
+        )
+    }
+})
+
 export {
     addTravelStory,
-    getAllTravelStories
+    getAllTravelStories,
+    imageUpload
 }
