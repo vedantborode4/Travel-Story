@@ -84,8 +84,75 @@ const imageUpload = asyncHandler( async (req, res) => {
     }
 })
 
+const editTravelStory = asyncHandler ( async (req, res) => {
+    const { id } = req.params
+    const {title, story, visitedLocation, imageURL, visitedDate} = req.body
+    const { userId } = req.user
+
+    if(!title || !story || !visitedLocation || !imageURL || !visitedDate) {
+        throw new ApiError(
+            400,
+            "All fields are requied"
+        )
+    }
+
+    const parsedVisitedDate =  new Date(parseInt(visitedDate))
+
+    try {
+        const travelStory = await TravelStory.findOne({_id: id, userId: userId})
+
+        if (!travelStory) {
+            throw new ApiError(404, "Travel Story not found")
+        }
+
+        travelStory.title = title
+        travelStory.story = story 
+        travelStory.visitedLocation = visitedLocation
+        travelStory.imageURL = imageURL || placeholderImgURL
+        travelStory.visitedDate = parsedVisitedDate
+
+        await travelStory.save()
+
+        return res
+        .status(200)
+        .json(
+            new ApiResponse(200, travelStory, "Update successful")
+        )
+        
+    } catch (error) {
+        throw new ApiError(500, error)
+    }
+})
+
+const deleteTravelStory = asyncHandler ( async (req, res) => {
+    
+    const { id } = req.params
+    const { userId } = req.body
+
+    try {
+        const travelStory = await TravelStory.findOne({_id: id, userId: userId})
+
+        if (!travelStory) {
+            throw new ApiError(404, "Travel Story not found")
+        }
+
+        await travelStory.deleteOne({_id: id, userId: userId})
+
+        return res
+            .status(200)
+            .json(
+                new ApiResponse(200, "travel story deleted succesfully")
+            )
+    } catch (error) {
+        
+    }
+})
+
+
 export {
     addTravelStory,
     getAllTravelStories,
-    imageUpload
+    imageUpload,
+    editTravelStory,
+    deleteTravelStory
 }
