@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import PasswordInput from '../../components/input/PasswordInput'
 import { useNavigate } from 'react-router-dom'
 import { validateEmail } from '../../utils/validateEmail'
+import axiosInstance from '../../utils/axiosInstance'
 
 function Login() {
 
@@ -25,6 +26,28 @@ function Login() {
     }
 
     setError("")
+
+    try {
+      const response = await axiosInstance.post("/login", {
+        email: email,
+        password: password
+      })
+
+      if (response.data && response.data.accessToken ) {
+        localStorage.setItem("token", response.data.accessToken)
+        navigate("/dashboard")
+      }
+    } catch (error) {
+      if(
+        error.response &&
+        error.response.data &&
+        error.response.data.message 
+      ){
+        setError(error.response.data.message)
+      }else{
+        setError("Unexpected error occurred. Please try again.")
+      }
+    }
     
   }
 
@@ -72,7 +95,7 @@ function Login() {
               Login
             </button>
 
-            <p className="text-xs text-slate-500 text-center my-4 ">Or</p>
+            <p className="text-xs text-slate-500 text-center my-4 ">Don't have an account?</p>
 
             <button
               type="submit"
