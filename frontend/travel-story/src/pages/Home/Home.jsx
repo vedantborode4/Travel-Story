@@ -35,6 +35,14 @@ function Home() {
   return (
     <>
       <Navbar userInfo = {userInfo}/>
+
+      <div className="container mx-auto py-10">
+        <div className="flex gap-7">
+          <div className="flex-1"></div>
+
+          <div className="w-[320px]"></div>
+        </div>
+      </div>
     </>
   )
 }
