@@ -34,7 +34,8 @@ function Signup() {
     setError("")
 
     try {
-      const response = await axiosInstance.post("/login", {
+      const response = await axiosInstance.post("/register", {
+        fullName: name,
         email: email,
         password: password
       })
