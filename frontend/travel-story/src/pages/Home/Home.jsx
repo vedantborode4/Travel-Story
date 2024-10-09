@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Navbar from '../../components/Navbar'
 import { useNavigate } from 'react-router-dom'
 import axiosInstance from '../../utils/axiosInstance'
+import TravelStoryCard from '../../components/Cards/TravelStoryCard.jsx'
 
 function Home() {
 
@@ -35,6 +36,12 @@ function Home() {
     }
   }
 
+  const handleEdit = async () => {}
+
+  const handleViewStory = async () => {}
+
+  const updateIsFavourite = async () => {}
+
   useEffect(() => {
     getUserInfo()
     getAllTravelStories()
@@ -58,6 +65,15 @@ function Home() {
                   return (
                     <TravelStoryCard
                       key={item.id}
+                      imgURL={item.imageURL}
+                      title={item.title}
+                      story={item.story}
+                      date={item.visitedDate}
+                      visitedLocation={item.visitedLocation}
+                      isFavourite={item.isFavourite}
+                      onEdit={() => {handleEdit(item)}}
+                      onClick={() => {handleViewStory(item)}}
+                      onFavouriteClick={() => {updateIsFavourite(item)}}
                     />
                   )
                 })}
