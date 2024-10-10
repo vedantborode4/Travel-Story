@@ -3,6 +3,9 @@ import Navbar from '../../components/Navbar'
 import { useNavigate } from 'react-router-dom'
 import axiosInstance from '../../utils/axiosInstance'
 import TravelStoryCard from '../../components/Cards/TravelStoryCard.jsx'
+import { MdAdd } from "react-icons/md"
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Home() {
 
@@ -10,6 +13,12 @@ function Home() {
 
   const [userInfo, setUserInfo] = useState(null)
   const [allStories, setAllStories] = useState([])
+
+  cosnt [openAddEditModal, setOpenAddEditModal] = useState({
+    isShown: false,
+    type: "add",
+    data: null
+  })
 
   const getUserInfo = async () => {
     try {
@@ -40,7 +49,25 @@ function Home() {
 
   const handleViewStory = async () => {}
 
-  const updateIsFavourite = async () => {}
+  const updateIsFavourite = async (storyData) => {
+    const storyId = storyData._Id
+
+    try {
+      const response = await axiosInstance.put(
+        "/update-is-favourite/" + storyId,
+        {
+          isFavourite: !storyData.isFavourite
+        }
+      );
+      
+      if(response.data && response.data.story){
+        toast.success("Story updated succesfully")
+        getAllTravelStories()
+      }
+    } catch (error) {
+      console.log("An unexpected error occurred. Please try again")
+    }
+  }
 
   useEffect(() => {
     getUserInfo()
@@ -84,6 +111,20 @@ function Home() {
           <div className="w-[320px]"></div>
         </div>
       </div>
+      
+      <button 
+        className="w-16 h-16 flex items-center justify-center rounded-full bg-primary hover:bg-cyan-400 fixed right-10 bottom-10"
+        onClick={() => {
+          setOpenAddEditModal({
+            isShown: true,
+            type: "add",
+            data: null
+          })
+        }}
+      >
+        <MdAdd className="text-[32px] text-white"/>
+      </button>
+      <ToastContainer/>
     </>
   )
 }
