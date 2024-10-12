@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { MdAdd, MdClose, MdDeleteOutline, MdUpdate } from 'react-icons/md'
+import DateSelector from '../../components/Input/DateSelector'
 
 const AddEditTravelStory = ({
     storyInfo,
@@ -7,6 +8,12 @@ const AddEditTravelStory = ({
     onClose,
     getAllTravelStories
 }) => {
+
+    const [title, setTitle] = useState("")
+    const [storyImg, setStoryImg] = useState(null)
+    const [story, setStory] = useState("")
+    const [visitedLocation, setVisitedLocation] = useState([])
+    cosnt [visitedDate, setVisitedDate] = useState(null)
 
     const handleAddOrUpdateClick = () => {
 
@@ -48,7 +55,23 @@ const AddEditTravelStory = ({
                     type="text" 
                     className="text-2xl text-slate-950 outline-none"
                     placeholder="A day at a Ganga Ghat"
+                    value={title}
+                    onChange={({target}) => setTitle(target.value)}
                 />
+
+                <div className="my-3">
+                    <DateSelector date={visitedDate} setDate={setVisitedDate}/>
+                </div>
+                <div className="flex flex-col gap-2 mt-4">
+                    <label className="input-label">STORY</label>
+                    <textarea
+                        type="text"
+                        className="text-sm text-slate-950 outline-none bg-slate-50 p-2 rounded"
+                        placeholder="Your Story"
+                        rows={10}
+                        value={story}
+                        onChange={({target}) => setStory(target.value)}
+                </div>
             </div>
         </div>
     </div>
