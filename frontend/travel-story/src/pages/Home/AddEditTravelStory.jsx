@@ -62,6 +62,9 @@ const AddEditTravelStory = ({
                 <div className="my-3">
                     <DateSelector date={visitedDate} setDate={setVisitedDate}/>
                 </div>
+
+                <ImageSelector image={storyImg} setImage={setStoryImg} />
+
                 <div className="flex flex-col gap-2 mt-4">
                     <label className="input-label">STORY</label>
                     <textarea
@@ -71,6 +74,7 @@ const AddEditTravelStory = ({
                         rows={10}
                         value={story}
                         onChange={({target}) => setStory(target.value)}
+                    />
                 </div>
             </div>
         </div>
