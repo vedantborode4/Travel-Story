@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { MdAdd, MdClose, MdDeleteOutline, MdUpdate } from 'react-icons/md'
 import DateSelector from '../../components/Input/DateSelector'
+import TagInput from '../../components/Input/TagInput'
 
 const AddEditTravelStory = ({
     storyInfo,
@@ -15,7 +16,32 @@ const AddEditTravelStory = ({
     const [visitedLocation, setVisitedLocation] = useState([])
     cosnt [visitedDate, setVisitedDate] = useState(null)
 
-    const handleAddOrUpdateClick = () => {}
+    const [error, setError] = useState("") 
+
+    const addNewTravelStory = async () => {}
+    const updateTravelStory= async () => {}
+
+    const handleAddOrUpdateClick = () => {
+        console.log("Input Data:", {title, storyImg, story, visitedLocation, visitedDate})
+
+        if (!title) {
+           setError("Please enter the Title")
+           return
+        }
+
+        if (!story) {
+           setError("Please enter the story")
+           return
+        }
+
+        setError("");
+
+        if(type === "edit") {
+            updateTravelStory()
+        }else {
+            addNewTravelStory()
+        }
+    }
 
     const handleDeleteStoryImg = async () => {}
 
@@ -45,6 +71,11 @@ const AddEditTravelStory = ({
                     <button className="" onClick={onClose}>
                         <MdClose className="text-xl text-slate-400" />
                     </button>
+
+                    {error && (
+                        <p className="text-red-500 text-xs pt-2 text-right">{error}</p>
+                    )}
+
                 </div>
             </div>
         </div>
@@ -76,6 +107,11 @@ const AddEditTravelStory = ({
                         value={story}
                         onChange={({target}) => setStory(target.value)}
                     />
+                </div>
+
+                <div className="pt-3">
+                    <label className="input-label">VISITED LOCATIONS</label>
+                    <TagInput tags={visitedLocation} setTags={setVisitedLocation}/>
                 </div>
             </div>
         </div>
