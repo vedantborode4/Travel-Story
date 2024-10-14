@@ -16,7 +16,7 @@ function Home() {
   const [userInfo, setUserInfo] = useState(null)
   const [allStories, setAllStories] = useState([])
 
-  cosnt [openAddEditModal, setOpenAddEditModal] = useState({
+  const [openAddEditModal, setOpenAddEditModal] = useState({
     isShown: false,
     type: "add",
     data: null
