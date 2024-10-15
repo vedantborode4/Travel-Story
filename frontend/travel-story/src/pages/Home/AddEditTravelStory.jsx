@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { MdAdd, MdClose, MdDeleteOutline, MdUpdate } from 'react-icons/md'
 import DateSelector from '../../components/Input/DateSelector'
 import TagInput from '../../components/Input/TagInput'
+import uploadImage from '../../utils/uploadImage'
 import {toast} from "react-toastify"
 
 const AddEditTravelStory = ({
