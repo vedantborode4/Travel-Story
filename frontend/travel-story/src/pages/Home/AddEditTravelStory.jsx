@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { MdAdd, MdClose, MdDeleteOutline, MdUpdate } from 'react-icons/md'
 import DateSelector from '../../components/Input/DateSelector'
 import TagInput from '../../components/Input/TagInput'
+import {toast} from "react-toastify"
 
 const AddEditTravelStory = ({
     storyInfo,
@@ -18,7 +19,42 @@ const AddEditTravelStory = ({
 
     const [error, setError] = useState("") 
 
-    const addNewTravelStory = async () => {}
+    const addNewTravelStory = async () => {
+    
+        try {
+        let imageUrl = "";
+
+        if (storyImg) {
+            const imgUploadRes = await uploadImage(storyImg);
+    
+            imageUrl = imgUploadRes.imageUrl || "";
+        }
+    
+        const response = await axiosInstance.post("/add-travel-story", {
+            title,
+            story,
+            imageUrl: imageUrl || "",
+            visitedLocation,
+            visitedDate: visitedDate
+            ? moment(visitedDate).valueOf()
+            : moment().valueOf(),
+        });
+    
+        if (response.data && response.data.story) {
+            toast.success("Story Added Successfully");
+    
+            getAllTravelStories();
+    
+            onClose();
+        }
+        } catch (error) {
+        console.error("Error adding travel story:", error);
+        toast.error("Failed to add the story. Please try again.");
+        }
+    };
+    
+
+
     const updateTravelStory= async () => {}
 
     const handleAddOrUpdateClick = () => {
