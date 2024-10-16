@@ -8,6 +8,7 @@ import Modal from "react-modal"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AddEditTravelStory from './AddEditTravelStory.jsx'
+import ViewTravelStory from './ViewTravelStory.jsx'
 
 function Home() {
 
@@ -19,6 +20,11 @@ function Home() {
   const [openAddEditModal, setOpenAddEditModal] = useState({
     isShown: false,
     type: "add",
+    data: null
+  })
+
+  const [openViewModal, setOpenViewModal] = useState({
+    isShown:false,
     data: null
   })
 
@@ -47,9 +53,17 @@ function Home() {
     }
   }
 
-  const handleEdit = async () => {}
+  const handleEdit = async (data) => {
+    setOpenAddEditModal({
+      isShown: true,
+      type: "edit",
+      data: data
+    })
+  }
 
-  const handleViewStory = async () => {}
+  const handleViewStory = async (data) => {
+    setOpenViewModal({ isShown: true , data})
+  }
 
   const updateIsFavourite = async (storyData) => {
     const storyId = storyData._Id
@@ -136,6 +150,31 @@ function Home() {
               data: null
             })
           }}
+        />
+      </Modal>
+
+      <Modal 
+        isOpen={openViewModal.isShown} 
+        onRequestClose={() => {}}
+        style={{
+          overlay:{
+            backgroundColor: "rgba(0,0,0,0.2)",
+            zIndex: 999
+          }
+        }}
+        appElement={document.getElementById("root")}
+        className="model-box"
+      >
+        <ViewTravelStory
+          storyInfo={openViewModal.data || null}
+          onClose={() => {
+            setOpenAddEditModal((prevState) => ({...prevState, isShown: false}))
+          }}
+          onEditClick={() => {
+            setOpenAddEditModal((prevState) => ({...prevState, isShown: false}))  
+            handleEdit(openViewModal.data || null)
+          }}
+          onDeleteClick={() => {}}
         />
       </Modal>
       <button 
