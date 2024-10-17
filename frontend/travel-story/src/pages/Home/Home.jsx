@@ -9,6 +9,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AddEditTravelStory from './AddEditTravelStory.jsx'
 import ViewTravelStory from './ViewTravelStory.jsx'
+import EmptyCard from '../../components/Cards/EmptyCard.jsx'
+import EmptyImage from "../../assets/images/EmptyImage.svg"
 
 function Home() {
 
@@ -139,7 +141,7 @@ function Home() {
                 })}
               </div>
             ) : (
-              <>Empty card here</>
+              <EmptyCard imgSrc={EmptyImage} message={`Start creating your first story! click the Add button to jot down your thoughts, ideas and  memories . Let's get started `}/>
             )}
           <div className="w-[320px]"></div>
         </div>
