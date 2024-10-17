@@ -11,6 +11,7 @@ import AddEditTravelStory from './AddEditTravelStory.jsx'
 import ViewTravelStory from './ViewTravelStory.jsx'
 import EmptyCard from '../../components/Cards/EmptyCard.jsx'
 import EmptyImage from "../../assets/images/EmptyImage.svg"
+import { DayPicker } from 'react-day-picker'
 
 function Home() {
 
@@ -21,6 +22,8 @@ function Home() {
 
   const [searchQuery, setSearchQuery] = useState("")
   const [filterType, setFilterType] = useState("")
+
+  const [dateRange, setDateRange] = useState({form: null, to: null})
 
   const [openAddEditModal, setOpenAddEditModal] = useState({
     isShown: false,
@@ -127,7 +130,15 @@ function Home() {
     setFilterType("")
     getAllTravelStories()
   }
+
+  const filterStoriesByDate = async (date) =>{
+
+  }
   
+  const handleDayClick = () => {
+    setDateRange(day)
+    filterStoriesByDate(day)
+  }
 
   useEffect(() => {
     getUserInfo()
@@ -174,7 +185,19 @@ function Home() {
             ) : (
               <EmptyCard imgSrc={EmptyImage} message={`Start creating your first story! click the Add button to jot down your thoughts, ideas and  memories . Let's get started `}/>
             )}
-          <div className="w-[320px]"></div>
+          <div className="w-[350px]">
+            <div className="bg-white border border-slate-200 shadow-lg shadow-slate-200/60 rounded-lg">
+              <div className="p-3">
+                <DayPicker
+                  captionLayout="dropdown-buttons"
+                  mode="range"
+                  selected={dateRange}
+                  onSelect={handleDayClick}
+                  pageNavigation
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       
