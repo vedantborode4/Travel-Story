@@ -12,11 +12,11 @@ const AddEditTravelStory = ({
     getAllTravelStories
 }) => {
 
-    const [title, setTitle] = useState("")
-    const [storyImg, setStoryImg] = useState(null)
-    const [story, setStory] = useState("")
-    const [visitedLocation, setVisitedLocation] = useState([])
-    cosnt [visitedDate, setVisitedDate] = useState(null)
+    const [title, setTitle] = useState(storyInfo?.title || "")
+    const [storyImg, setStoryImg] = useState(storyInfo?.imageUrl || null )
+    const [story, setStory] = useState(storyInfo?.story || "")
+    const [visitedLocation, setVisitedLocation] = useState(storyInfo?.visitedLocation || [])
+    cosnt [visitedDate, setVisitedDate] = useState(storyInfo?.visitedDate || null)
 
     const [error, setError] = useState("") 
 
@@ -56,7 +56,56 @@ const AddEditTravelStory = ({
     
 
 
-    const updateTravelStory= async () => {}
+    const updateTravelStory= async () => {
+        
+        const storyId = storyInfo._id;
+        
+        try {
+            let imageUrl = "";
+
+            const postData = {
+                title,
+                story,
+                imageUrl: imageUrl || "",
+                visitedLocation,
+                visitedDate: visitedDate
+                ? moment(visitedDate).valueOf()
+                : moment().valueOf(),
+            }
+
+            if (typeof storyImg === "object") {
+                const imgUploadRes = await uploadImage(storyImg)
+                imageUrl = imgUploadRes.imageUrl || ""
+
+                postData = {
+                    ...postData,
+                    imageUrl: imageUrl
+                }
+            }
+        
+            const response = await axiosInstance.put(
+                "/update/" + storyId,
+                postData 
+            );
+        
+            if (response.data && response.data.story) {
+                toast.success("Story Updated Successfully");
+        
+                getAllTravelStories();
+        
+                onClose();
+            }
+        } catch (error) {
+            if (error.response &&
+            error.response.data &&
+            error.response.data.message
+            ){
+                setError(error.response.data.message)
+            } else {
+                setError("an unexpected error occured. please try again!")
+            }
+        }
+    }
 
     const handleAddOrUpdateClick = () => {
         console.log("Input Data:", {title, storyImg, story, visitedLocation, visitedDate})
