@@ -85,6 +85,23 @@ function Home() {
     }
   }
 
+  const deleteTravelStory = async (data) => {
+    const storyId = data._id;
+  
+    try {
+      const response = await axiosInstance.delete(`/delete-story/${storyId}`);
+  
+      if (response.data && !response.data.error) {
+        toast.success("Story Deleted Successfully")
+        setOpenViewModal((prevState) => ({ ...prevState, isShown: false }));
+        getAllTravelStories()
+      }
+    } catch (error) {
+      console.error("An unexpected error occurred. Please try again.", error)
+    }
+  };
+  
+
   useEffect(() => {
     getUserInfo()
     getAllTravelStories()
@@ -174,7 +191,9 @@ function Home() {
             setOpenAddEditModal((prevState) => ({...prevState, isShown: false}))  
             handleEdit(openViewModal.data || null)
           }}
-          onDeleteClick={() => {}}
+          onDeleteClick={() => {
+            deleteTravelStory(openViewModal.data || null)
+          }}
         />
       </Modal>
       <button 
