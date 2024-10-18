@@ -12,6 +12,8 @@ import ViewTravelStory from './ViewTravelStory.jsx'
 import EmptyCard from '../../components/Cards/EmptyCard.jsx'
 import EmptyImage from "../../assets/images/EmptyImage.svg"
 import { DayPicker } from 'react-day-picker'
+import getEmptyCardMessage from '../../utils/getEmptyCardMessage.js'
+import getEmptyCardImg from '../../utils/getEmptyCardImg.js'
 
 function Home() {
 
@@ -86,7 +88,14 @@ function Home() {
       
       if(response.data && response.data.story){
         toast.success("Story updated succesfully")
+
+        if (filterType === "search" && searchQuery ){
+          onSearchStory(searchQuery)
+        } else if (filterType === "date") {
+          filterStoriesByDate(dateRange)
+        } else {
         getAllTravelStories()
+        }
       }
     } catch (error) {
       console.log("An unexpected error occurred. Please try again")
@@ -158,6 +167,12 @@ function Home() {
     filterStoriesByDate(day)
   }
 
+  const resetFilter = (day) => {
+    setDateRange({ from: null, to: null })
+    setFilterType("")
+    getAllTravelStories()
+  }
+
   useEffect(() => {
     getUserInfo()
     getAllTravelStories()
@@ -179,6 +194,15 @@ function Home() {
       />
 
       <div className="container mx-auto py-10">
+
+        <FilterInfoTitle
+          filterType={filterType}
+          filterDate={filterDate}
+          onClick={() => {
+            resetFilter()
+          }}
+        />
+
         <div className="flex gap-7">
           <div className="flex-1"></div>
             {allStories.length > 0 ? (
@@ -201,7 +225,10 @@ function Home() {
                 })}
               </div>
             ) : (
-              <EmptyCard imgSrc={EmptyImage} message={`Start creating your first story! click the Add button to jot down your thoughts, ideas and  memories . Let's get started `}/>
+              <EmptyCard 
+                imgSrc={getEmptyCardImg(filterType)} 
+                message={getEmptyCardMessage(filterType)}
+              />
             )}
           <div className="w-[350px]">
             <div className="bg-white border border-slate-200 shadow-lg shadow-slate-200/60 rounded-lg">
