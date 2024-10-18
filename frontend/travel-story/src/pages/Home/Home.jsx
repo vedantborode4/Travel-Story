@@ -131,11 +131,29 @@ function Home() {
     getAllTravelStories()
   }
 
-  const filterStoriesByDate = async (date) =>{
 
-  }
+  const filterStoriesByDate = async (day) => {
+    try {
+      const startDate = day.from ? moment(day.from).valueOf() : null;
+      const endDate = day.to ? moment(day.to).valueOf() : null;
   
-  const handleDayClick = () => {
+      if (startDate && endDate) {
+        const response = await axiosInstance.get("/travel-stories/filter", {
+          params: { startDate, endDate },
+        });
+  
+        if (response.data?.stories) {
+          setFilterType("date");
+          setAllStories(response.data.stories);
+        }
+      }
+    } catch (error) {
+      console.error("An unexpected error occurred. Please try again.", error)
+    }
+  };
+  
+  
+  const handleDayClick = (day) => {
     setDateRange(day)
     filterStoriesByDate(day)
   }
