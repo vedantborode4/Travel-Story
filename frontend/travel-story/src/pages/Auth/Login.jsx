@@ -28,12 +28,13 @@ function Login() {
     setError("")
 
     try {
-      const response = await axiosInstance.post("/login", {
+      const response = await axiosInstance.post("/api/v1/users/login", {
         email: email,
         password: password
       })
+      console.log(response)
 
-      if (response.data && response.data.accessToken ) {
+      if (response.data && response.data.data.accessToken ) {
         localStorage.setItem("token", response.data.accessToken)
         navigate("/dashboard")
       }

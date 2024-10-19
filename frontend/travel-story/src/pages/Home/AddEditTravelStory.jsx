@@ -77,7 +77,7 @@ const AddEditTravelStory = ({
                 const imgUploadRes = await uploadImage(storyImg)
                 imageUrl = imgUploadRes.imageUrl || ""
 
-                postData = {
+                let postData = {
                     ...postData,
                     imageUrl: imageUrl
                 }
