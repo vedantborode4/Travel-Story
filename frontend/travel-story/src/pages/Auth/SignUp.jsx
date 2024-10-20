@@ -34,13 +34,15 @@ function Signup() {
     setError("")
 
     try {
-      const response = await axiosInstance.post("/register", {
+      const response = await axiosInstance.post("api/v1/users/register", {
         fullName: name,
         email: email,
         password: password
       })
 
-      if (response.data && response.data.accessToken ) {
+      console.log(response)
+
+      if (response.data && response.data.data.accessToken ) {
         localStorage.setItem("token", response.data.accessToken)
         navigate("/dashboard")
       }
