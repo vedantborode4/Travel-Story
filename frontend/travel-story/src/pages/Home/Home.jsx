@@ -14,6 +14,7 @@ import EmptyImage from "../../assets/images/EmptyImage.svg"
 import { DayPicker } from 'react-day-picker'
 import getEmptyCardMessage from '../../utils/getEmptyCardMessage.js'
 import getEmptyCardImg from '../../utils/getEmptyCardImg.js'
+import FilterInfoTitle from "../../components/Cards/FilterInfoTitle.jsx"
 
 function Home() {
 
@@ -40,7 +41,8 @@ function Home() {
 
   const getUserInfo = async () => {
     try {
-      const response = await axiosInstance.get("/get-user")
+      const response = await axiosInstance.get("api/v1/users/get-user")
+      console.log(response)
       if (response.data && response.data.user) {
         setUserInfo(response.data.user)
       }
@@ -197,7 +199,7 @@ function Home() {
 
         <FilterInfoTitle
           filterType={filterType}
-          filterDate={filterDate}
+          filterDate={dateRange}
           onClick={() => {
             resetFilter()
           }}
@@ -306,7 +308,7 @@ function Home() {
             data: null
           })
         }}
-        getAllTravelStories={getAllTravelStories}
+        // getAllTravelStories={getAllTravelStories}
       >
         <MdAdd className="text-[32px] text-white"/>
       </button>

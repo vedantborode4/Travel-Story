@@ -59,6 +59,22 @@ const registerUser = asyncHandler( async(req, res) => {
 
 })
 
+const getUser = asyncHandler( async(req, res) => {
+
+    const { userId } = req.user
+
+    const isUser = await User.findOne({_id: userId})
+
+    if (!isUser) {
+        return res.sendStatus(401)
+    }
+
+    return res.json({
+        user: isUser,
+        message: "user exists"
+    })
+})
+
 const loginUser = asyncHandler( async (req, res) => {
     const {email, password} = req.body
 
@@ -134,4 +150,5 @@ export {
     registerUser,
     loginUser,
     logoutUser,
+    getUser
 }
