@@ -31,6 +31,8 @@ function Login() {
       const response = await axiosInstance.post("/api/v1/users/login", {
         email: email,
         password: password
+      },{
+        withCredentials: true
       })
       console.log(response)
 
